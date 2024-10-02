@@ -9,12 +9,57 @@
     <body>
         <div class="header">
             <div>
-                <img src="./images/book-open-line-svgrepo-com.svg" alt="Book icon">
+                <img src="./images/book.svg" alt="Book icon">
                 <h1>Library</h1>
             </div>
             <button type="button">Add Book</button>
         </div>
-        <div class="main-content"></div>
+        <div class="main-content">
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Pages</th>
+                            <th>Read</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>A funny story</td>
+                            <td>Drako</td>
+                            <td>243</td>
+                            <td>
+                                <button type="button">
+                                    <img src="./images/x-circle.svg" alt="">
+                                </button>
+                            </td>
+                            <td>
+                                <button type="button">
+                                    <img src="./images/trash-icon.svg" alt="Trash icon">
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>A scary story</td>
+                            <td>Sergio</td>
+                            <td>150</td>
+                            <td>
+                                <button type="button">
+                                    <img src="./images/check-circle.svg" alt="">
+                                </button></td>
+                            <td>
+                                <button type="button">
+                                    <img src="./images/trash-icon.svg" alt="Trash icon">
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
         <script src="./script.js"></script>
     </body>
 </html>

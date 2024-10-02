@@ -50,6 +50,10 @@ button {
 }
 
 /* Content styling */
+:root {
+    --header-bg-color: #f4f3f3;
+}
+
 body {
     display: grid;
     grid-template-rows: 125px 1fr;
@@ -61,6 +65,7 @@ body {
     align-items: center;
     justify-content: space-between;
     padding: 0 60px;
+    background-color: var(--header-bg-color);
 }
 
 .header > div:first-child {
@@ -87,5 +92,46 @@ h1 {
 
 .main-content {
     grid-row: 2;
-    background-color: pink;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.table-container {    
+    margin-top: 50px;
+    border: 2px solid black;
+    border-radius: 10px;
+    height: 85%;
+    overflow: auto;
+    width: 60%;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+thead tr, 
+tbody tr {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    align-items: center;
+    justify-items: center;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: var(--header-bg-color);
+}
+
+td, th {
+    padding: 0.8rem;
+    font-size: 1.1rem;
+}
+
+td:nth-child(4) img {
+    height: 30px;
+}
+
+td:nth-child(5) img {
+    height: 25px;
 }
