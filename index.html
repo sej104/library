@@ -12,7 +12,7 @@
                 <img src="./images/book.svg" alt="Book icon">
                 <h1>Library</h1>
             </div>
-            <button type="button">Add Book</button>
+            <button type="button" id="show-dialog">Add Book</button>
         </div>
         <div class="main-content">
             <div class="table-container">
@@ -23,7 +23,7 @@
                             <th>Author</th>
                             <th>Pages</th>
                             <th>Read</th>
-                            <th></th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -59,6 +59,46 @@
                     </tbody>
                 </table>
             </div>
+            <dialog id="dialog">
+                <form>
+                    <div class="form-header">
+                        <h2>Add Book</h2>
+                        <button type="button" id="close-dialog" autofocus>
+                            <img src="./images/close-icon.svg" alt="Close button">
+                        </button>
+                    </div>
+                    <div class="form-inputs">
+                        <p>
+                            <label for="title">Title</label>
+                            <input type="text" id="title" name="title" required>
+                        </p>
+                        <p>
+                            <label for="author">Author</label>
+                            <input type="text" id="author" name="author" required>
+                        </p>
+                        <p>
+                            <label for="pages">Pages</label>
+                            <input type="number" id="pages" name="pages" min="1" max="1000" required>
+                        </p>
+                        <fieldset>
+                            <legend>Already read?</legend>
+                            <ul>
+                                <li>
+                                    <input type="radio" id="read" name="already_read" value="yes" checked>
+                                    <label for="read" class="radio-label">Yes</label>
+                                </li>
+                                <li>
+                                    <input type="radio" id="not_read" name="already_read" value="no">
+                                    <label for="not_read" class="radio-label">No</label>
+                                </li>
+                            </ul>
+                        </fieldset>
+                    </div>
+                    <div class="form-submit">
+                        <button type="submit" id="submit-btn">Submit</button>
+                    </div>
+                </form>
+            </dialog>
         </div>
         <script src="./script.js"></script>
     </body>
