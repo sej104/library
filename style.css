@@ -47,11 +47,15 @@ button {
     appearance: none;
     border: none;
     background: none;
+    font-weight: 500;
 }
 
 /* Content styling */
 :root {
     --header-bg-color: #f4f3f3;
+    --dialog-border-color: #d9d9d9;
+    --input-border-color: #4e4e4e;
+    --invalid: #ff0000;
 }
 
 body {
@@ -87,7 +91,6 @@ h1 {
     font-size: 1.3rem;
     padding: 20px;
     border-radius: 10px;
-    font-weight: 500;
 }
 
 .main-content {
@@ -99,7 +102,7 @@ h1 {
 
 .table-container {    
     margin-top: 50px;
-    border: 2px solid black;
+    border: 2px solid #000;
     border-radius: 10px;
     height: 85%;
     overflow: auto;
@@ -134,4 +137,77 @@ td:nth-child(4) img {
 
 td:nth-child(5) img {
     height: 25px;
+}
+
+dialog {
+    margin: auto;
+    width: 450px;
+    height: 455px;
+    padding: 0;
+}
+
+form {
+    display: grid;
+    grid-template-rows: repeat(2, auto) 1fr;
+    height: 100%;
+}
+
+.form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+}
+
+.form-header, 
+.form-inputs {
+    border-bottom: 1px solid var(--dialog-border-color);
+}
+
+.form-inputs {
+    padding: 16px 16px;
+}
+
+.form-inputs p {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 9px;
+}
+
+input[type="text"],
+input[type="number"] {
+    padding: 5px;
+    appearance: none;
+}
+
+input,
+fieldset {
+    border: 1px solid var(--input-border-color);
+    border-radius: 5px;
+}
+
+label:not(.radio-label), 
+legend {
+    font-weight: 500;
+}
+
+.form-submit {
+    align-self: center;
+    justify-self: end;
+    padding: 0 16px;
+}
+
+#submit-btn {
+    background-color: #000;
+    color: #fff;
+    padding: 5px;
+}
+
+#submit-btn, 
+input:user-invalid {
+    border-radius: 5px;
+}
+
+input:user-invalid {
+    border: 1px solid var(--invalid);
 }
