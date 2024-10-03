@@ -8,7 +8,6 @@ function Book(title, author, pages, hasRead) {
     this.author = author;
     this.pages = pages;
     this.hasRead = hasRead;
-    this.blah = "blah"
 }
 
 function addBookToLibrary(book) {
@@ -24,8 +23,10 @@ function displayBooks() {
         for (let key in book) {
             const td = document.createElement("td");
             td.textContent = book[key];
-            tr.appendChild(td);
+            tr.appendChild(td);   
         }
+
+        tr.appendChild(createTrashButton(book));
 
         tbody.appendChild(tr);
     }
@@ -43,6 +44,21 @@ function displayNewBook() {
     }
 
     tbody.appendChild(tr);
+}
+
+function createTrashButton(book) {
+    const td = document.createElement("td");
+    const button = document.createElement("button");
+    const img = document.createElement("img");
+
+    button.setAttribute("type", "button");
+    button.dataset.bookIndex = myLibrary.indexOf(book);
+    img.setAttribute("src", "./images/trash-icon.svg");
+    img.setAttribute("alt", "Trash icon");
+    button.appendChild(img);
+    td.appendChild(button);
+
+    return td;
 }
 
 const dialog = document.querySelector("dialog");
@@ -72,3 +88,17 @@ closeBtn.addEventListener("click", () => {
 });
 
 displayBooks();
+
+const buttons = document.querySelectorAll("[data-book-index");
+
+buttons.forEach(button => {
+    button.addEventListener("click", () => {
+        const bookIndex = button.dataset.bookIndex;
+        myLibrary.splice(bookIndex, 1);
+        const tbody = document.querySelector("tbody");
+        while(tbody.firstChild) {
+            tbody.removeChild(tbody.firstChild);
+        }
+        displayBooks();
+    });
+});
