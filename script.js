@@ -3,8 +3,9 @@ const form = document.querySelector("form");
 const showBtn = document.querySelector("#show-dialog");
 const closeBtn = document.querySelector("#close-dialog");
 const myLibrary = [
-    new Book("A cool story", "Joe", 100, "yes"),
-    new Book("A sad story", "Bob", 200, "no"),
+    new Book("An awesome story", "Alex", 100, "yes"),
+    new Book("A bad story", "Bob", 200, "no"),
+    new Book("A cool story", "Chris", 300, "no"),
 ];
 
 function Book(title, author, pages, hasRead) {
@@ -66,7 +67,9 @@ function displayBooks() {
             tr.appendChild(td);   
         }
 
-        tr.appendChild(createRemoveButton(book));
+        const trashButton = createRemoveButton(book);
+        tr.setAttribute("id", `book-${trashButton.querySelector("button").dataset.bookIndex}`);
+        tr.appendChild(trashButton);
         tbody.appendChild(tr);
     }
 }
@@ -88,18 +91,27 @@ function displayNewBook() {
 
 displayBooks();
 
-function removeBook() {
-    const buttons = document.querySelectorAll("[data-book-index]");
-    
-    buttons.forEach(button => {
-        button.addEventListener("click", () => {
-            const bookIndex = button.dataset.bookIndex;
-            myLibrary.splice(bookIndex, 1);
-            const tbody = document.querySelector("tbody");
-            while(tbody.firstChild) {
-                tbody.removeChild(tbody.firstChild);
-            }
-            displayBooks();
-        });
+const buttons = Array.from(document.querySelectorAll("[data-book-index]"));
+
+buttons.forEach(button => {
+    button.addEventListener("click", () => {
+        const bookIndex = button.dataset.bookIndex;
+        myLibrary.splice(bookIndex, 1);
+        const tbody = document.querySelector("tbody");
+        const tr = document.querySelector(`#book-${bookIndex}`);
+        tbody.removeChild(tr);
+        buttons.splice(button, 1);
+        updateIndexes(buttons);
     });
+});
+
+function updateIndexes(buttons) {
+    let i = 0;
+    for (let button of buttons) {
+        const bookIndex = button.dataset.bookIndex;
+        const tr = document.querySelector(`#book-${bookIndex}`);
+        button.dataset.bookIndex = i;
+        tr.setAttribute("id", `book-${button.dataset.bookIndex}`);
+        i++;
+    }
 }
