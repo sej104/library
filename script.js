@@ -3,7 +3,9 @@ const form = document.querySelector("form");
 const showBtn = document.querySelector("#show-dialog");
 const closeBtn = document.querySelector("#close-dialog");
 const myLibrary = [
-
+    new Book("An awesome story", "Alex", 100, "yes"),
+    new Book("A bad story", "Bob", 200, "no"),
+    new Book("A cool story", "Chris", 300, "no"),
 ];
 const buttons = [];
 
@@ -54,6 +56,27 @@ function createRemoveButton(book) {
     return td;
 }
 
+function displayBooks() {
+    const tbody = document.querySelector("tbody");
+
+    for (let book of myLibrary) {
+        const tr = document.createElement("tr");
+
+        for (let key in book) {
+            const td = document.createElement("td");
+            td.textContent = book[key];
+            tr.appendChild(td);   
+        }
+
+        const removeButton = createRemoveButton(book);
+        tr.setAttribute("id", `book-${removeButton.querySelector("button").dataset.bookIndex}`);
+        tr.appendChild(removeButton);
+        tbody.appendChild(tr);
+        buttons.push(removeButton.querySelector("button"));
+        addRemoveRowListener(removeButton.querySelector("button"));
+    }
+}
+
 function displayNewBook() {
     const tbody = document.querySelector("tbody");
     const newBook = myLibrary[myLibrary.length - 1];
@@ -72,6 +95,8 @@ function displayNewBook() {
     buttons.push(removeButton.querySelector("button"));
     addRemoveRowListener(removeButton.querySelector("button"));
 }
+
+displayBooks();
 
 function addRemoveRowListener(button) {
     button.addEventListener("click", () => {
