@@ -87,9 +87,10 @@ h1 {
 }
 
 .header button {
-    border: 2px solid #000;
     font-size: 1.3rem;
-    padding: 20px;
+    background-color: #000;
+    color: #fff;
+    padding: 15px 20px;
     border-radius: 10px;
 }
 
@@ -103,7 +104,6 @@ h1 {
 .table-container {    
     margin-top: 50px;
     border: 2px solid #000;
-    border-radius: 10px;
     height: 85%;
     overflow: auto;
     width: 60%;
@@ -114,6 +114,10 @@ table {
     width: 100%;
 }
 
+thead {
+    background-color: var(--header-bg-color);
+}
+
 thead tr, 
 tbody tr {
     display: grid;
@@ -122,8 +126,8 @@ tbody tr {
     justify-items: center;
 }
 
-tbody tr:nth-child(odd) {
-    background-color: var(--header-bg-color);
+tbody tr {
+    border-bottom: 1px solid var(--dialog-border-color);
 }
 
 td, th {
