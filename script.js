@@ -110,9 +110,39 @@ function displayNewBook() {
     const tr = document.createElement("tr");
 
     for (let key in newBook) {
-        const td = document.createElement("td");
-        td.textContent = newBook[key];
-        tr.appendChild(td);
+        if (newBook.hasOwnProperty(key)) {
+            const td = document.createElement("td");
+            if (key === "read") {
+                const button = document.createElement("button");
+                button.setAttribute("type", "button");
+                const img = document.createElement("img");
+                button.addEventListener("click", () => {
+                    newBook.updateReadStatus();
+                    img.setAttribute("alt", "Cancel icon");
+    
+                    if (newBook[key] === "yes") {
+                        img.setAttribute("src", "./images/check-circle.svg");
+                    } else {
+                        img.setAttribute("src", "./images/x-circle.svg");
+                    }
+                });
+    
+                img.setAttribute("alt", "Cancel icon");
+    
+                if (newBook[key] === "yes") {
+                    img.setAttribute("src", "./images/check-circle.svg");
+                } else {
+                    img.setAttribute("src", "./images/x-circle.svg");
+                }
+    
+                button.appendChild(img);
+                td.appendChild(button);
+            } else {
+                td.textContent = newBook[key];
+            }
+    
+            tr.appendChild(td);
+        }
     }
 
     const removeButton = createRemoveButton(newBook);
@@ -147,7 +177,6 @@ function updateIndexes() {
             i++;
         }
 }
-
 
 Book.prototype.updateReadStatus = function() {
     if (this.read === "yes") {
