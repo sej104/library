@@ -8,6 +8,8 @@ const myLibrary = [
     new Book("A cool story", "Chris", 300, "no"),
 ];
 
+const buttons = [];
+
 function Book(title, author, pages, hasRead) {
     this.title = title;
     this.author = author;
@@ -67,11 +69,13 @@ function displayBooks() {
             tr.appendChild(td);   
         }
 
-        const trashButton = createRemoveButton(book);
-        tr.setAttribute("id", `book-${trashButton.querySelector("button").dataset.bookIndex}`);
-        tr.appendChild(trashButton);
+        const removeButton = createRemoveButton(book);
+        tr.setAttribute("id", `book-${removeButton.querySelector("button").dataset.bookIndex}`);
+        tr.appendChild(removeButton);
         tbody.appendChild(tr);
+        buttons.push(removeButton.querySelector("button"));
     }
+    addRemoveRowListener();
 }
 
 function displayNewBook() {
@@ -85,33 +89,40 @@ function displayNewBook() {
         tr.appendChild(td);
     }
 
-    tr.appendChild(createRemoveButton(newBook));
+    const removeButton = createRemoveButton(newBook);
+    tr.setAttribute("id", `book-${removeButton.querySelector("button").dataset.bookIndex}`);
+    tr.appendChild(removeButton);
+
+    buttons.push(removeButton);
     tbody.appendChild(tr);
+    addRemoveRowListener();
+
 }
 
 displayBooks();
 
-const buttons = Array.from(document.querySelectorAll("[data-book-index]"));
-
-buttons.forEach(button => {
-    button.addEventListener("click", () => {
-        const bookIndex = button.dataset.bookIndex;
-        myLibrary.splice(bookIndex, 1);
-        const tbody = document.querySelector("tbody");
-        const tr = document.querySelector(`#book-${bookIndex}`);
-        tbody.removeChild(tr);
-        buttons.splice(button, 1);
-        updateIndexes(buttons);
+function addRemoveRowListener() {
+    buttons.forEach(button => {
+        button.addEventListener("click", () => {
+            const bookIndex = button.dataset.bookIndex;
+            myLibrary.splice(bookIndex, 1);
+            const tbody = document.querySelector("tbody");
+            const tr = document.querySelector(`#book-${bookIndex}`);
+            tbody.removeChild(tr);
+            buttons.splice(bookIndex, 1);
+            updateIndexes();
+        });
     });
-});
+}
 
-function updateIndexes(buttons) {
+
+function updateIndexes() {
     let i = 0;
-    for (let button of buttons) {
-        const bookIndex = button.dataset.bookIndex;
-        const tr = document.querySelector(`#book-${bookIndex}`);
-        button.dataset.bookIndex = i;
-        tr.setAttribute("id", `book-${button.dataset.bookIndex}`);
-        i++;
-    }
+        for (let button of buttons) {
+            const bookIndex = button.dataset.bookIndex;
+            const tr = document.querySelector(`#book-${bookIndex}`);
+            button.dataset.bookIndex = i;
+            tr.setAttribute("id", `book-${i}`);
+            i++;
+        }
 }
