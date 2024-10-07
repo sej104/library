@@ -9,11 +9,11 @@ const myLibrary = [
 ];
 const buttons = [];
 
-function Book(title, author, pages, hasRead) {
+function Book(title, author, pages, read) {
     this.title = title;
     this.author = author;
     this.pages = pages;
-    this.hasRead = hasRead;
+    this.read = read;
 }
 
 function addBookToLibrary(book) {
@@ -64,7 +64,34 @@ function displayBooks() {
 
         for (let key in book) {
             const td = document.createElement("td");
-            td.textContent = book[key];
+            if (key === "read") {
+                const button = document.createElement("button");
+                button.setAttribute("type", "button");
+                const img = document.createElement("img");
+                button.addEventListener("click", () => {
+                    book.updateReadStatus();
+                    img.setAttribute("alt", "Cancel icon");
+
+                    if (book[key] === "yes") {
+                        img.setAttribute("src", "./images/check-circle.svg");
+                    } else {
+                        img.setAttribute("src", "./images/x-circle.svg");
+                    }
+                });
+
+                img.setAttribute("alt", "Cancel icon");
+
+                if (book[key] === "yes") {
+                    img.setAttribute("src", "./images/check-circle.svg");
+                } else {
+                    img.setAttribute("src", "./images/x-circle.svg");
+                }
+
+                button.appendChild(img);
+                td.appendChild(button);
+            } else {
+                td.textContent = book[key];
+            }
             tr.appendChild(td);   
         }
 
@@ -119,4 +146,13 @@ function updateIndexes() {
             tr.setAttribute("id", `book-${i}`);
             i++;
         }
+}
+
+
+Book.prototype.updateReadStatus = function() {
+    if (this.read === "yes") {
+        this.read = "no";
+    } else {
+        this.read = "yes";
+    }
 }
