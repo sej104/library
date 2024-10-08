@@ -2,7 +2,7 @@ const dialog = document.querySelector("dialog");
 const form = document.querySelector("form");
 const showBtn = document.querySelector("#show-dialog");
 const closeBtn = document.querySelector("#close-dialog");
-const removeButtons = [];
+const tbody = document.querySelector("tbody");
 
 function Book(title, author, pages, read) {
     this.title = title;
@@ -25,28 +25,61 @@ function addBookToLibrary(book) {
     myLibrary.push(book);
 }
 
-showBtn.addEventListener("click", () => {
-    dialog.showModal();
-});
+showBtn.addEventListener("click", () => dialog.showModal());
 
-closeBtn.addEventListener("click", () => {
-    dialog.close();
-});
+closeBtn.addEventListener("click", () => dialog.close());
 
 form.addEventListener("submit", (event) => {
     event.preventDefault();
     dialog.close();
     addBookToLibrary(new Book(
-            event.currentTarget.title.value, 
-            event.currentTarget.author.value, 
-            event.currentTarget.pages.value, 
-            event.currentTarget.read.value
+            event.target.title.value, 
+            event.target.author.value, 
+            event.target.pages.value, 
+            event.target.read.value
         ));
     form.reset();
-    displayNewBook();
+    displayBooks();
 });
 
-function createReadButton(book) {
+
+function displayBooks() {
+    tbody.replaceChildren();
+
+    for (let book of myLibrary) {
+        const tr = document.createElement("tr");
+
+        for (let key in book) {
+            if (book.hasOwnProperty(key)) {
+                const td = document.createElement("td");
+
+                if (key === "read") {
+                    const readStatusButton = createReadStatusButton(book);
+                    readStatusButton.addEventListener("click", () => {
+                        toggleReadStatus(readStatusButton, book);
+                    });
+                    td.appendChild(readStatusButton);
+                } else {
+                    td.textContent = book[key];
+                }
+
+                tr.appendChild(td);   
+            }
+        }
+
+        const deleteButton = createDeleteButton(book);
+        const td = document.createElement("td");
+
+        deleteButton.addEventListener("click", () => {
+            deleteRow(deleteButton);
+        });
+        td.appendChild(deleteButton)
+        tr.appendChild(td);
+        tbody.appendChild(tr);
+    }
+}
+
+function createReadStatusButton(book) {
     const button = document.createElement("button");
     const img = document.createElement("img");
 
@@ -60,11 +93,11 @@ function createReadButton(book) {
 
     button.setAttribute("type", "button");
     button.appendChild(img);
+    
     return button;
 }
 
-function createRemoveButton(book) {
-    const td = document.createElement("td");
+function createDeleteButton(book) {
     const button = document.createElement("button");
     const img = document.createElement("img");
 
@@ -73,109 +106,30 @@ function createRemoveButton(book) {
     img.setAttribute("src", "./images/trash-icon.svg");
     img.setAttribute("alt", "Trash icon");
     button.appendChild(img);
-    td.appendChild(button);
 
-    return td;
+    return button;
 }
 
-function addReadStatusListener(button, book) {
-    button.addEventListener("click", () => {
-        const img = button.querySelector("img");
-        book.updateReadStatus();
+function toggleReadStatus(button, book) {
+    const img = button.querySelector("img");
+    book.updateReadStatus();
 
-        if (book.read === "yes") {
-            img.setAttribute("src", "./images/check-circle.svg");
-            img.setAttribute("alt", "Check icon");
-        } else {
-            img.setAttribute("src", "./images/x-circle.svg");
-            img.setAttribute("alt", "Cancel icon");
-        }
-    });
-}
-
-function addRemoveRowListener(button) {
-    button.addEventListener("click", () => {
-        const bookIndex = button.dataset.bookIndex;
-        const tbody = document.querySelector("tbody");
-        const tr = document.querySelector(`#book-index-${bookIndex}`);
-
-        tbody.removeChild(tr);
-        myLibrary.splice(bookIndex, 1);
-        removeButtons.splice(bookIndex, 1);
-        updateIndexes();
-    });
-}
-
-function updateIndexes() {
-    for (let i = 0; i < removeButtons.length; i++) {
-        const bookIndex = removeButtons[i].dataset.bookIndex;
-        const tr = document.querySelector(`#book-index-${bookIndex}`);
-
-        removeButtons[i].dataset.bookIndex = i;
-        tr.setAttribute("id", `book-index-${i}`);
+    if (book.read === "yes") {
+        img.setAttribute("src", "./images/check-circle.svg");
+        img.setAttribute("alt", "Check icon");
+    } else {
+        img.setAttribute("src", "./images/x-circle.svg");
+        img.setAttribute("alt", "Cancel icon");
     }
 }
 
-function displayBooks() {
-    const tbody = document.querySelector("tbody");
+function deleteRow(button) {
+    const bookIndex = button.dataset.bookIndex;
+    const tr = button.closest("tr");
 
-    for (let book of myLibrary) {
-        const tr = document.createElement("tr");
-
-        for (let key in book) {
-            if (book.hasOwnProperty(key)) {
-                const td = document.createElement("td");
-
-                if (key === "read") {
-                    const readButton = createReadButton(book);
-                    addReadStatusListener(readButton, book);
-                    td.appendChild(readButton);
-                } else {
-                    td.textContent = book[key];
-                }
-
-                tr.appendChild(td);   
-            }
-        }
-
-        const removeButton = createRemoveButton(book);
-        removeButtons.push(removeButton.querySelector("button"));
-        addRemoveRowListener(removeButton.querySelector("button"));
-
-        tr.setAttribute("id", `book-index-${removeButton.querySelector("button").dataset.bookIndex}`);
-        tr.appendChild(removeButton);
-        tbody.appendChild(tr);
-    }
-}
-
-function displayNewBook() {
-    const tbody = document.querySelector("tbody");
-    const tr = document.createElement("tr");
-    const newBook = myLibrary[myLibrary.length - 1];
-
-    for (let key in newBook) {
-        if (newBook.hasOwnProperty(key)) {
-            const td = document.createElement("td");
-
-            if (key === "read") {
-                const readButton = createReadButton(newBook);
-                addReadStatusListener(readButton, newBook);
-                td.appendChild(readButton);
-            } else {
-                td.textContent = newBook[key];
-            }
-    
-            tr.appendChild(td);
-        }
-    }
-
-    const removeButton = createRemoveButton(newBook);
-    removeButtons.push(removeButton.querySelector("button"));
-    addRemoveRowListener(removeButton.querySelector("button"));
-
-    tr.setAttribute("id", `book-index-${removeButton.querySelector("button").dataset.bookIndex}`);
-    tr.appendChild(removeButton);
-    tbody.appendChild(tr);
+    tbody.removeChild(tr);
+    myLibrary.splice(bookIndex, 1);
+    displayBooks();
 }
 
 displayBooks();
